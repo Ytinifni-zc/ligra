@@ -22,6 +22,7 @@
 // OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "ligra.h"
+#include <iostream>
 
 struct BFS_F {
   uintE* Parents;
@@ -46,11 +47,18 @@ void Compute(graph<vertex>& GA, commandLine P) {
   parallel_for(long i=0;i<n;i++) Parents[i] = UINT_E_MAX;
   Parents[start] = start;
   vertexSubset Frontier(n,start); //creates initial frontier
+  long node = 0l;
+  //auto min = [](int a, int b) {
+  //  return a<b?a:b;
+  //};
   while(!Frontier.isEmpty()){ //loop until frontier is empty
     vertexSubset output = edgeMap(GA, Frontier, BFS_F(Parents));    
     Frontier.del();
     Frontier = output; //set new frontier
+    //std::cout << Frontier.m << std::endl;
+    node += Frontier.m;
   } 
+  std::cout << "Go through " << node << " nodes." << std::endl;
   Frontier.del();
   free(Parents); 
 }

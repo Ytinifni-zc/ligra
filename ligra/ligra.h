@@ -41,6 +41,7 @@
 #include "gettime.h"
 #include "index_map.h"
 #include "edgeMap_utils.h"
+#include <utils/time_cost.hpp>
 using namespace std;
 
 //*****START FRAMEWORK*****
@@ -505,8 +506,11 @@ int parallel_main(int argc, char* argv[]) {
       }
       G.del();
     } else {
-      graph<asymmetricVertex> G =
-        readGraph<asymmetricVertex>(iFile,compressed,symmetric,binary,mmap); //asymmetric graph
+      graph<asymmetricVertex> G;
+      common_utils::cost([&](){
+        std::cout << "Read " << iFile << ": " << std::endl;  
+        G = readGraph<asymmetricVertex>(iFile,compressed,symmetric,binary,mmap); //asymmetric graph
+          });
       Compute(G,P);
       if(G.transposed) G.transpose();
       for(int r=0;r<rounds;r++) {
